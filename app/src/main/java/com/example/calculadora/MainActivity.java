@@ -40,45 +40,77 @@ public class MainActivity extends AppCompatActivity {
         Button split = findViewById(R.id.buttonsplit);
         Button equal = findViewById(R.id.buttonequal);
 
-        StringBuilder textinput = new StringBuilder();
-
+        StringBuilder input = new StringBuilder();
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 int viewId = view.getId();
+                System.out.println(viewId);
+                int x = R.id.buttonequal;
 
                 if (viewId == R.id.button1){
-
+                    input.append("1");
                 } else if (viewId == R.id.button2) {
-
+                    input.append("2");
                 } else if (viewId == R.id.button3) {
-
+                    input.append("3");
                 } else if (viewId == R.id.button4) {
-
+                    input.append("4");
                 } else if (viewId == R.id.button5) {
-
+                    input.append("5");
                 } else if (viewId == R.id.button6) {
-
+                    input.append("6");
                 } else if (viewId == R.id.button7) {
-
+                    input.append("7");
                 } else if (viewId == R.id.button8) {
-
+                    input.append("8");
                 } else if (viewId == R.id.button9) {
-
+                    input.append("9");
                 } else if (viewId == R.id.button0) {
-
+                    input.append("0");
                 } else if (viewId == R.id.button00) {
-
+                    input.append("00");
                 } else if (viewId == R.id.buttonadd) {
-
+                    String temp = input.toString();
+                    char y = temp.charAt(temp.length()-1);
+                    if(Character.isDigit(y)){
+                        input.append("+");
+                    } else {
+                        input.deleteCharAt(input.length() - 1);
+                        input.append("+");
+                    }
                 } else if (viewId == R.id.buttonminus) {
-
+                    String temp = input.toString();
+                    char y = temp.charAt(temp.length()-1);
+                    if(Character.isDigit(y)){
+                        input.append("-");
+                    } else {
+                        input.deleteCharAt(input.length() - 1);
+                        input.append("-");
+                    }
                 } else if (viewId == R.id.buttonmult) {
-
+                    String temp = input.toString();
+                    char y = temp.charAt(temp.length()-1);
+                    if(Character.isDigit(y)){
+                        input.append("*");
+                    } else {
+                        input.deleteCharAt(input.length() - 1);
+                        input.append("*");
+                    }
                 } else if (viewId == R.id.buttonsplit) {
-
+                    String temp = input.toString();
+                    char y = temp.charAt(temp.length()-1);
+                    if(Character.isDigit(y)){
+                        input.append("/");
+                    } else {
+                        input.deleteCharAt(input.length() - 1);
+                        input.append("/");
+                    }
                 } else if (viewId == R.id.buttonequal) {
+                    System.out.println(input);
 
                 }
             }
