@@ -3,6 +3,7 @@ package com.example.calculadora;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+    StringBuilder firstValue = new StringBuilder();
+    StringBuilder secondValue = new StringBuilder();
+    char[] op = new char[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,78 +43,158 @@ public class MainActivity extends AppCompatActivity {
         Button mult = findViewById(R.id.buttonmult);
         Button split = findViewById(R.id.buttonsplit);
         Button equal = findViewById(R.id.buttonequal);
+        Button borrar = findViewById(R.id.button);
 
-        StringBuilder input = new StringBuilder();
+
+        TextView result = findViewById(R.id.inputresult);
+
+
+        borrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firstValue.setLength(0); //reiniciar los valores
+                firstValue.trimToSize();
+                secondValue.setLength(0);
+                secondValue.trimToSize();
+                op[0] = '.';
+                result.setText("0");
+            }
+        });
 
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 int viewId = view.getId();
-                System.out.println(viewId);
-                int x = R.id.buttonequal;
 
                 if (viewId == R.id.button1){
-                    input.append("1");
+                    firstValue.append("1");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button2) {
-                    input.append("2");
+                    firstValue.append("2");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button3) {
-                    input.append("3");
+                    firstValue.append("3");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button4) {
-                    input.append("4");
+                    firstValue.append("4");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button5) {
-                    input.append("5");
+                    firstValue.append("5");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button6) {
-                    input.append("6");
+                    firstValue.append("6");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button7) {
-                    input.append("7");
+                    firstValue.append("7");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button8) {
-                    input.append("8");
+                    firstValue.append("8");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button9) {
-                    input.append("9");
+                    firstValue.append("9");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button0) {
-                    input.append("0");
+                    firstValue.append("0");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.button00) {
-                    input.append("00");
+                    firstValue.append("00");
+                    result.setText(firstValue);
                 } else if (viewId == R.id.buttonadd) {
-                    String temp = input.toString();
-                    char y = temp.charAt(temp.length()-1);
-                    if(Character.isDigit(y)){
-                        input.append("+");
-                    } else {
-                        input.deleteCharAt(input.length() - 1);
-                        input.append("+");
+                    if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
+                        secondValue.append(firstValue);
+                        firstValue.setLength(0);
+                        firstValue.trimToSize();
+                        op[0] = '+';
+                    } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+                        int calc = first+second;
+                        result.setText(Integer.toString(calc));
+
+                        resetValues(calc); //y añadir el resultado
                     }
+
                 } else if (viewId == R.id.buttonminus) {
-                    String temp = input.toString();
-                    char y = temp.charAt(temp.length()-1);
-                    if(Character.isDigit(y)){
-                        input.append("-");
-                    } else {
-                        input.deleteCharAt(input.length() - 1);
-                        input.append("-");
+                    if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
+                        secondValue.append(firstValue);
+                        firstValue.setLength(0);
+                        firstValue.trimToSize();
+                        op[0] = '-';
+                    } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+
+                        int calc = first-second;
+                        result.setText(Integer.toString(calc));
+
+                        resetValues(calc);
+                        //y añadir el resultado
                     }
+
                 } else if (viewId == R.id.buttonmult) {
-                    String temp = input.toString();
-                    char y = temp.charAt(temp.length()-1);
-                    if(Character.isDigit(y)){
-                        input.append("*");
-                    } else {
-                        input.deleteCharAt(input.length() - 1);
-                        input.append("*");
+                    if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
+                        secondValue.append(firstValue);
+                        firstValue.setLength(0);
+                        firstValue.trimToSize();
+                        op[0] = '*';
+                    } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+                        int calc = first*second;
+                        result.setText(Integer.toString(calc));
+
+                        resetValues(calc);
                     }
                 } else if (viewId == R.id.buttonsplit) {
-                    String temp = input.toString();
-                    char y = temp.charAt(temp.length()-1);
-                    if(Character.isDigit(y)){
-                        input.append("/");
-                    } else {
-                        input.deleteCharAt(input.length() - 1);
-                        input.append("/");
+                    if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
+                        secondValue.append(firstValue);
+                        firstValue.setLength(0);
+                        firstValue.trimToSize();
+                        op[0] = '/';
+                    } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+                        int calc = first/second;
+                        result.setText(Integer.toString(calc));
+
+                        resetValues(calc);
                     }
                 } else if (viewId == R.id.buttonequal) {
-                    System.out.println(input);
+                    System.out.println("-----"+firstValue);
+                    System.out.println(secondValue);
+                    System.out.println(op[0]);
+                    Integer res = calculate(Integer.parseInt(secondValue.toString()),Integer.parseInt(firstValue.toString()),op[0]);
+                    result.setText(Integer.toString(res));
+                    resetValues(res);
+                   /* if(op[0] == '+'){
+                        System.out.println("suma");
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+
+                        result.setText(Integer.toString(calculate(first,second,'+')));
+
+                    } else if (op[0] == '-') {
+                        System.out.println("resta");
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+                        int calc = first-second;
+                        result.setText(Integer.toString(calc));
+
+                    } else if (op[0] == '*') {
+                        System.out.println("mult");
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+                        int calc = first*second;
+                        result.setText(Integer.toString(calc));
+
+                    } else if (op[0] == '/'){
+                        System.out.println("div");
+                        Integer first = Integer.parseInt(secondValue.toString());
+                        Integer second = Integer.parseInt(firstValue.toString());
+                        int calc = first/second;
+                        result.setText(Integer.toString(calc));
+
+                    }*/
 
                 }
             }
@@ -128,5 +212,40 @@ public class MainActivity extends AppCompatActivity {
             Button button = findViewById(id);
             button.setOnClickListener(listener);
         }
+    }
+
+    private void resetValues(int calc){
+        firstValue.setLength(0); //reiniciar los valores
+        firstValue.trimToSize();
+        secondValue.setLength(0);
+        secondValue.trimToSize();
+
+        secondValue.append(calc);
+    }
+
+    private Integer calculate(Integer value1, Integer value2, char operator){
+        if(operator == '+'){
+            System.out.println("suma");
+            int calc = value1+value2;
+            return calc;
+        } else if (operator == '-') {
+            System.out.println("resta");
+            int calc = value1-value2;
+            return calc;
+        } else if (operator == '*') {
+            System.out.println("mult");
+            int calc = value1*value2;
+            return calc;
+        } else if (operator == '/'){
+            System.out.println("div");
+            int calc = value1/value2;
+            return calc;
+        } else {
+            return 0;
+        }
+    }
+
+    private void operationPressed (){
+
     }
 }
