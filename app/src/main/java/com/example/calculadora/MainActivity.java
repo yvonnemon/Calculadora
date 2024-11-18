@@ -64,6 +64,21 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.animate()
+                        .scaleX(0.9f)
+                        .scaleY(0.9f)
+                        .setDuration(100)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                view.animate()
+                                        .scaleX(1f)
+                                        .scaleY(1f)
+                                        .setDuration(50)
+                                        .start();
+                            }
+                        })
+                        .start();
                 int viewId = view.getId();
 
                 if (viewId == R.id.button1){
@@ -100,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     firstValue.append("00");
                     result.setText(firstValue);
                 } else if (viewId == R.id.buttonadd) {
+                    System.out.println("+++++++++++++++");
                     if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
                         secondValue.append(firstValue);
                         firstValue.setLength(0);
@@ -108,13 +124,19 @@ public class MainActivity extends AppCompatActivity {
                     } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
                         Integer first = Integer.parseInt(secondValue.toString());
                         Integer second = Integer.parseInt(firstValue.toString());
+                        if(op[0] != '.' && op[0] != '+'){
+                            first = calculate(first,second, op[0]);
+                        }
+
                         int calc = first+second;
                         result.setText(Integer.toString(calc));
-
+                        op[0] = '+';
                         resetValues(calc); //y añadir el resultado
+                        secondValue.append(calc);
                     }
 
                 } else if (viewId == R.id.buttonminus) {
+                    System.out.println("-------------");
                     if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
                         secondValue.append(firstValue);
                         firstValue.setLength(0);
@@ -123,15 +145,19 @@ public class MainActivity extends AppCompatActivity {
                     } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
                         Integer first = Integer.parseInt(secondValue.toString());
                         Integer second = Integer.parseInt(firstValue.toString());
-
+                        if(op[0] != '.' && op[0] != '-'){
+                            first = calculate(first,second, op[0]);
+                        }
                         int calc = first-second;
                         result.setText(Integer.toString(calc));
-
+                        op[0] = '-';
                         resetValues(calc);
+                        secondValue.append(calc);
                         //y añadir el resultado
                     }
 
                 } else if (viewId == R.id.buttonmult) {
+                    System.out.println("******************");
                     if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
                         secondValue.append(firstValue);
                         firstValue.setLength(0);
@@ -140,12 +166,18 @@ public class MainActivity extends AppCompatActivity {
                     } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
                         Integer first = Integer.parseInt(secondValue.toString());
                         Integer second = Integer.parseInt(firstValue.toString());
+                        if(op[0] != '.' && op[0] != '*'){
+                            first = calculate(first,second, op[0]);
+                        }
+
                         int calc = first*second;
                         result.setText(Integer.toString(calc));
-
+                        op[0] = '*';
                         resetValues(calc);
+                        secondValue.append(calc);
                     }
                 } else if (viewId == R.id.buttonsplit) {
+                    System.out.println("//////////////////");
                     if (firstValue.length() >= 1 && secondValue.length() == 0){ //solo hace algo si ya hay un valor previo
                         secondValue.append(firstValue);
                         firstValue.setLength(0);
@@ -154,10 +186,15 @@ public class MainActivity extends AppCompatActivity {
                     } else if (firstValue.length() >= 1 && secondValue.length() >= 1){ //si ambos valores
                         Integer first = Integer.parseInt(secondValue.toString());
                         Integer second = Integer.parseInt(firstValue.toString());
+                        if(op[0] != '.' && op[0] != '/'){
+                            first = calculate(first,second, op[0]);
+                        }
+
                         int calc = first/second;
                         result.setText(Integer.toString(calc));
-
+                        op[0] = '/';
                         resetValues(calc);
+                        secondValue.append(calc);
                     }
                 } else if (viewId == R.id.buttonequal) {
                     System.out.println("-----"+firstValue);
@@ -166,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                     Integer res = calculate(Integer.parseInt(secondValue.toString()),Integer.parseInt(firstValue.toString()),op[0]);
                     result.setText(Integer.toString(res));
                     resetValues(res);
+                    firstValue.append(res); //TODO
                    /* if(op[0] == '+'){
                         System.out.println("suma");
                         Integer first = Integer.parseInt(secondValue.toString());
@@ -219,8 +257,6 @@ public class MainActivity extends AppCompatActivity {
         firstValue.trimToSize();
         secondValue.setLength(0);
         secondValue.trimToSize();
-
-        secondValue.append(calc);
     }
 
     private Integer calculate(Integer value1, Integer value2, char operator){
